@@ -1,8 +1,9 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
 import { IExecDataProtector } from "@iexec/dataprotector";
+import { Contact, IExecWeb3mail } from "@iexec/web3mail";
 
 const ADMIN_USER_ADDRESS = "0x754edfB906252B304f89c59c61f4368028bdcE6c";
 const WEB3MAIL_APP_ADDRESS = "0x781482C39CcE25546583EaC4957Fb7Bf04C277D2";
@@ -19,6 +20,11 @@ const getProvider = () => {
 async function initDataProtector() {
   const web3Provider = getProvider();
   return new IExecDataProtector(web3Provider);
+}
+
+async function initWeb3mail() {
+  const web3Provider = getProvider();
+  return new IExecWeb3mail(web3Provider);
 }
 
 // Signup : Protect email and grant access to web3mail app
@@ -96,7 +102,42 @@ function SignUpComponent() {
   );
 }
 
+function ClientList() {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [clients, setClients] = useState<Contact[]>();
+
+  const fetchClient = async () => {
+    setLoading(true);
+    const web3mail = await initWeb3mail();
+    if (!web3mail) {
+      throw new Error("Web3mail is not available.");
+    }
+    const contactsList = await web3mail.fetchMyContacts();
+    console.log("contactsList", contactsList);
+    setClients(contactsList);
+    setLoading(false);
+  };
+
+  return (
+    <div>
+      <button onClick={fetchClient}>Fetch Clients</button>
+      {loading && <p>loading</p>}
+      {clients && (
+        <div>
+          <h4>My Contacts</h4>
+          {clients.map((client) => (
+            <div key={client.address}>
+              <h5>{client.address}</h5>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function App() {
+  const isAdmin = true;
   return (
     <>
       <div>
@@ -112,6 +153,11 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
       <SignUpComponent />
+      {isAdmin && 
+      <><h2>Admin</h2>
+        <ClientList />
+      </>
+      }
     </>
   );
 }
