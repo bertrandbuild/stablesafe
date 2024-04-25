@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@iexec/dataprotector": "^0.5.3",
     "@iexec/web3mail": "^0.6.0",
     "graphql": "^16.8.1",

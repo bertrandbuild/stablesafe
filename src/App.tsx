@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -118,6 +118,26 @@ function ClientList() {
     setLoading(false);
   };
 
+  const sendEmail = async (protectedAddress: string) => {
+    const web3mail = await initWeb3mail();
+    if (!web3mail) {
+      throw new Error("Web3mail is not available.");
+    }
+
+    await web3mail.sendEmail({
+      protectedData: protectedAddress,
+      emailSubject: "Depeg Alert - USDC is falling",
+      emailContent: "The usdc price is de-pegging. Please check the price on the website.",
+      contentType: "text/html",
+      senderName: "Depeg Alert team"
+    });
+    console.log("sendEmail", sendEmail);
+  } 
+
+  useEffect(() => {
+    fetchClient();
+  }, []);
+
   return (
     <div>
       <button onClick={fetchClient}>Fetch Clients</button>
@@ -128,6 +148,7 @@ function ClientList() {
           {clients.map((client) => (
             <div key={client.address}>
               <h5>{client.address}</h5>
+              <button onClick={() => sendEmail(client.address)}>Send Email</button>
             </div>
           ))}
         </div>
