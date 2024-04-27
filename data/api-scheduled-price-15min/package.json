@@ -3,5 +3,10 @@
   "version": "1.0.0",
   "description": "Example of creating a function that runs as a cron job using the serverless `schedule` event",
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@iexec/iexec-oracle-factory-wrapper": "^2.1.0",
+    "dotenv": "^16.4.5"
+  }
 }
