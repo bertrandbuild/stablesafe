@@ -6,15 +6,20 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs18.x
+  # TODO: replace by your own var
+  environment: # Global env var
+    ADMIN_WALLET_PRIVATE_KEY: ""
+    COIN_GECKO_API_KEY: ""
+    ORACLE_CID: ""
 
 functions:
   rateHandler:
-    handler: index.run
+    handler: index.update
     events:
-      # Invoke Lambda function every minute
-      - schedule: rate(1 minute)
+      # Invoke update function every 15 minutes
+      - schedule: rate(15 minutes)
   cronHandler:
     handler: index.run
     events:
-      # Invoke Lambda function every 2nd minute from Mon-Fri
-      - schedule: cron(0/2 * ? * MON-FRI *)
+      # Invoke read function every 20 minutes
+      - schedule: cron(0/20 * * * ? *)
