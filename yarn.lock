@@ -297,16 +297,17 @@
     "@openzeppelin/contracts" "3.0.0-rc.0"
     solstruct "0.0.13"
 
-"@iexec/web3mail@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@iexec/web3mail/-/web3mail-0.6.0.tgz#423bfe90bf91488d89c499ed9dd41f0cc5c4bd56"
-  integrity sha512-OJHJZueVWpaxQxwJ6OAx6xjyZ9u3/exRX7OR+XhvViZg34kClfQEs25RgUGuaG5B5wNTuELgHJ5WUQinBEo7gA==
+"@iexec/web3mail@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@iexec/web3mail/-/web3mail-0.6.1.tgz#19a35999192aced70dff428104308dcafd5da821"
+  integrity sha512-D6YUcp5v4goN6PCr0mihdeVBsrl8clmGhNo96WWOiVRK2a2pAiznB7rYLu+3sjwbNGoB/7GobcjnCpsMZ/681g==
   dependencies:
     "@ethersproject/bytes" "^5.7.0"
     "@ethersproject/random" "^5.7.0"
+    buffer "^6.0.3"
     ethers "^6.8.1"
     graphql-request "^6.1.0"
-    iexec "^8.5.0"
+    iexec "^8.7.0"
     kubo-rpc-client "^3.0.1"
     yup "^1.1.1"
 
@@ -1766,7 +1767,7 @@ ieee754@^1.1.13, ieee754@^1.2.1:
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.2.1.tgz#8eb7a10a63fff25d15a57b001586d177d1b0d352"
   integrity sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==
 
-iexec@^8.5.0, iexec@^8.6.0:
+iexec@^8.6.0, iexec@^8.7.0:
   version "8.7.0"
   resolved "https://registry.yarnpkg.com/iexec/-/iexec-8.7.0.tgz#14a7a6e74829ce1ee58ae1d1f069300410fbe216"
   integrity sha512-JZGJ9iadPbJbdGJABYrnSkIZvsa+AJ/prhUpSz20gSnfMTvNLbcu4YmqhnlYU7l8bizQ7/eI/qaiAcIEPKERxw==
