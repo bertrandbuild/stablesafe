@@ -1,6 +1,7 @@
-org: yobro
-app: depeg-alert
-service: api-scheduled-price-15min
+# TODO: replace by serverless info
+org: org-name
+app: app-name
+service: service-name
 frameworkVersion: '3'
 
 provider:
@@ -12,6 +13,7 @@ provider:
     COIN_GECKO_API_KEY: ""
     ORACLE_CID: ""
 
+# TODO: edit freqency if needed
 functions:
   rateHandler:
     handler: index.update
@@ -22,4 +24,5 @@ functions:
     handler: index.run
     events:
       # Invoke read function every 20 minutes
+      # (5min after the oracle update so it has time to update the price)
       - schedule: cron(0/20 * * * ? *)
