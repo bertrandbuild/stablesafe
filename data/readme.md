@@ -1,4 +1,9 @@
+# USDC Dataset
+
 ## Files
+
+Those are training algorithm files that voters can use to train their own models.
+
 - data_list_usdc.json : just the list of all coin from coingecko matching "usdc"
 - data_usdc_large_depeg: 1678338000 (9march'23) to 1679184000 (19march'23) - depeg from svb bank
 - data_usdc_no_depeg_1 : normal flat usdc activity from : 1710878400 to 1711893600
@@ -10,6 +15,10 @@
 - data_usdc_price_history : 2024-04-02 - 2024-04-19
 
 ## List of depegs
+
+This is the list of depeg that have been detected running the autonomous voter algorithm during backtesting phase.
+All voters have to submit a backtesting history to be whitelisted
+
 - 2023-04-15 
 - 2023-04-16 
 - 2023-05-29 

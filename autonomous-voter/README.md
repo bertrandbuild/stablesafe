@@ -1,40 +1,23 @@
-# Serverless API Oracle Cron using Coingecko, serverless and iExecOracle
+# Autonomous voter template
 
-This template demonstrates how to develop and deploy a simple cron-like service running on AWS Lambda using the traditional Serverless Framework.
+This template demonstrates how to setup a voter and contributer to the StableSafe project.
 
-## Serverless setup
+## Get a backtesting history to be verified
 
+Only permissionned voters can contribute to the depeg detection. 
+
+To be verified, you need to submit a backtesting history.
+
+You can use the data provided in [/data](../data)
+
+## Getting started
+
+- Edit the `run` function or use the example detection in [index.mjs](index.mjs)
+- Create a new project on [serverless.com](https://www.serverless.com)
+- Setup all the env and setup var in the `serverless.yml` file (using the `serverless.yml.example`)
+- In order to deploy with dashboard, you need to first login with : `serverless login`
+- And then perform deployment with : `serverless deploy`
 - Documentation can be found [here](https://www.serverless.com/examples/aws-node-scheduled-cron)
-
-### Deployment
-
-This example is made to work with the Serverless Framework dashboard, which includes advanced features such as CI/CD, monitoring, metrics, etc.
-
-In order to deploy with dashboard, you need to first login with:
-
-```
-serverless login
-```
-
-and then perform deployment with:
-
-```
-serverless deploy
-```
-
-After running deploy, you should see output similar to:
-
-```bash
-Deploying aws-node-scheduled-cron-project to stage dev (us-east-1)
-
-✔ Service deployed to stack aws-node-scheduled-cron-project-dev (205s)
-
-functions:
-  rateHandler: aws-node-scheduled-cron-project-dev-rateHandler (2.9 kB)
-  cronHandler: aws-node-scheduled-cron-project-dev-cronHandler (2.9 kB)
-```
-
-There is no additional step required. Your defined schedules becomes active right away after deployment.
 
 ### Local invocation
 
@@ -42,10 +25,4 @@ In order to test out your functions locally, you can invoke them with the follow
 
 ```
 serverless invoke local --function rateHandler
-```
-
-After invocation, you should see output similar to:
-
-```bash
-Your cron function "aws-node-scheduled-cron-dev-rateHandler" ran at Fri Mar 05 2021 15:14:39 GMT+0100 (Central European Standard Time)
 ```
