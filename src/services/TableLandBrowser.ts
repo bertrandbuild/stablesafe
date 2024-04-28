@@ -1,6 +1,6 @@
 import { Database } from "@tableland/sdk";
 import { Wallet, getDefaultProvider } from "ethers";
-import { Vote } from "../App";
+import { Vote } from "../types";
 
 const KEY = import.meta.env.VITE_KEY;
 const TABLE_NAME = 'vote_op_sepolia_11155420_54';
