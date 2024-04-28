@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import "./App.css";
-import { VoteList } from "./components/VoteList";
-import { TableLandManager } from "./services/TableLandBrowser";
-import { OraclePriceComponent } from "./components/OraclePrice";
-import { Vote } from "./types";
-import { ClientList } from "./components/ClientList";
-import { VoteForm } from "./components/VoteForm";
+import "../styles/App.css";
+import { VoteList } from "../components/VoteList";
+import { TableLandManager } from "../services/TableLandBrowser";
+import { OraclePriceComponent } from "../components/OraclePrice";
+import { Vote } from "../types";
+import { ClientList } from "../components/ClientList";
+import { VoteForm } from "../components/VoteForm";
 
 function Admin() {
   const isAdmin = true;

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import "./App.css";
-import { TableLandManager } from "./services/TableLandBrowser.ts";
-import { Vote } from "./types.ts";
-import { VoteList } from "./components/VoteList.tsx";
-import { SignUpComponent } from "./components/SignUp.tsx";
-import { OraclePriceComponent } from "./components/OraclePrice.tsx";
+import "../styles/App.css";
+import { TableLandManager } from "../services/TableLandBrowser.ts";
+import { Vote } from "../types.ts";
+import { VoteList } from "../components/VoteList.tsx";
+import { SignUpComponent } from "../components/SignUp.tsx";
+import { OraclePriceComponent } from "../components/OraclePrice.tsx";
 
 function App() {
   const [loading, setLoading] = useState<boolean>(false);

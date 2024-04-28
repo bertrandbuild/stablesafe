@@ -4,10 +4,10 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import App from "./App.tsx";
-import Page404 from "./Page404.tsx";
-import Admin from "./Admin.tsx";
-import "./index.css";
+import App from "./pages/App.tsx";
+import Page404 from "./pages/Page404.tsx";
+import Admin from "./pages/Admin.tsx";
+import "./styles/index.css";
 
 const router = createBrowserRouter([
   {
