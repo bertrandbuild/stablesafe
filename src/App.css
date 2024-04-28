@@ -53,11 +53,20 @@ button {
   width: 50%;
 }
 
-.subscriber-elm {
+.list-elm {
   display: flex;
   justify-content: space-between;
   padding: 0 1em;
   margin: 1em;
+}
+
+.hero {
+  height: 100vh;
+  padding-top: 3em
+}
+
+.votes {
+  margin-bottom: 5em;
 }
 
 ul {

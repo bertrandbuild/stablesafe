@@ -2,18 +2,21 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { Contact, IExecWeb3mail } from "@iexec/web3mail";
 
-type VoteT = {
-  notation: number,
-  notation_reason: string
-}
+type Vote = {
+  notation: number;
+  notation_reason: string;
+};
 
-const data: VoteT[] = [{
-  notation: 1,
-  notation_reason: "stable environment"
-}, {
-  notation: 3,
-  notation_reason: "a depeg has been detected"
-}]
+const data: Vote[] = [
+  {
+    notation: 1,
+    notation_reason: "stable environment",
+  },
+  {
+    notation: 3,
+    notation_reason: "a depeg has been detected",
+  },
+];
 
 const getProvider = () => {
   const web3Provider = window.ethereum;
@@ -53,16 +56,17 @@ function ClientList() {
     await web3mail.sendEmail({
       protectedData: protectedAddress,
       emailSubject: "Depeg Alert - USDC is falling",
-      emailContent: "The usdc price is de-pegging. Please check the price on the website.",
+      emailContent:
+        "The usdc price is de-pegging. Please check the price on the website.",
       contentType: "text/html",
-      senderName: "Depeg Alert team"
+      senderName: "Depeg Alert team",
     });
     console.log("sendEmail", sendEmail);
-  }
+  };
 
   const sendEmailToAll = async () => {
     console.log("sendEmailToAll: to be added");
-  }
+  };
 
   useEffect(() => {
     fetchClient();
@@ -70,18 +74,23 @@ function ClientList() {
 
   return (
     <div>
-      {/* <button onClick={fetchClient}>Fetch Clients</button> */}
       {loading && <p>loading</p>}
       {clients && (
         <div>
           <h4>Subscribers</h4>
-          {clients && <div>
-            <button className="red" onClick={sendEmailToAll}>Send Email to all</button>
-          </div>}
+          {clients && (
+            <div>
+              <button className="red" onClick={sendEmailToAll}>
+                Send Email to all
+              </button>
+            </div>
+          )}
           {clients.map((client) => (
-            <div className="subscriber-elm" key={client.address}>
+            <div className="list-elm" key={client.address}>
               <h5>{client.address}</h5>
-              <button onClick={() => sendEmail(client.address)}>Send Email</button>
+              <button onClick={() => sendEmail(client.address)}>
+                Send Email
+              </button>
             </div>
           ))}
         </div>
@@ -96,7 +105,11 @@ function Admin() {
     <>
       <div className="header">
         <span>
-          <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Flogos-download.com%2Fwp-content%2Fuploads%2F2022%2F01%2FUSD_Coin_USDC_Logo.png" className="logo" alt="Vite logo" />
+          <img
+            src="https://logos-download.com/wp-content/uploads/2022/01/USD_Coin_USDC_Logo.png"
+            className="logo"
+            alt="Vite logo"
+          />
         </span>
         <h1>Admin</h1>
       </div>
@@ -104,7 +117,10 @@ function Admin() {
         <div className="w50">
           <h2>Risk</h2>
           <span className="risk-level">
-            <h1>{data.reduce((sum, newVal) => sum + newVal.notation, 0) / data.length}</h1>
+            <h1>
+              {data.reduce((sum, newVal) => sum + newVal.notation, 0) /
+                data.length}
+            </h1>
             <h3>/5</h3>
           </span>
         </div>
@@ -120,17 +136,25 @@ function Admin() {
       <p className="read-the-docs">
         This prediction is based on : {data.length} votes.
       </p>
-      {!isAdmin && <div>
-        <p>
-          You are not allowed to add a vote.<br/>
-          You can <a href="https://x.com/bertrandbuild" target="_blank">make a request</a> to become a voter.
-        </p>
-      </div>}
-      {isAdmin && 
-      <><h2>Admin</h2>
-        <ClientList />
-      </>
-      }
+      {!isAdmin && (
+        <div>
+          <p>
+            You are not allowed to add a vote.
+            <br />
+            You can{" "}
+            <a href="https://x.com/bertrandbuild" target="_blank">
+              make a request
+            </a>{" "}
+            to become a voter.
+          </p>
+        </div>
+      )}
+      {isAdmin && (
+        <>
+          <h2>Admin</h2>
+          <ClientList />
+        </>
+      )}
     </>
   );
 }
