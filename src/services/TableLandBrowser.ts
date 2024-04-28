@@ -1,17 +1,17 @@
 import { Database } from "@tableland/sdk";
 import { Wallet, getDefaultProvider } from "ethers";
 import { Vote } from "../types";
+import { TABLE_NAME, USDC_ASSET_ID } from "../constants";
 
 const KEY = import.meta.env.VITE_KEY;
-const TABLE_NAME = 'vote_op_sepolia_11155420_54';
-const USDC_ASSET_ID = 1;
+const providerUrl = import.meta.env.VITE_PUBLIC_INFURA_URL + import.meta.env.VITE_PUBLIC_INFURA_ID;
 
 export class TableLandManager {
   signer: Wallet;
   db: Database<Vote>;
   constructor() {
-    const wallet = new Wallet(KEY as string);
-    const provider = getDefaultProvider(import.meta.env.VITE_PUBLIC_INFURA_URL as string + import.meta.env.VITE_PUBLIC_INFURA_ID as string);
+    const wallet = new Wallet(KEY);
+    const provider = getDefaultProvider(providerUrl);
     this.signer = wallet.connect(provider);
     this.db = new Database<Vote>({ signer: this.signer });
   }

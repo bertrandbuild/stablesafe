@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { EXPLORER_URL } from "../constants";
+import { IEXEC_EXPLORER_URL } from "../constants";
 import { IExecDataProtectorManager } from "../services/iExecDataProtector";
 
 // Signup : Protect email and grant access to web3mail app
@@ -65,7 +65,7 @@ export function SignUpComponent() {
           <h4>Private Signup Successful</h4>
           <p>
             You can check the transaction proof on the{" "}
-            <a target="_blank" href={EXPLORER_URL + resultTxHash}>
+            <a target="_blank" href={IEXEC_EXPLORER_URL + resultTxHash}>
               iExec chain explorer
             </a>
           </p>
