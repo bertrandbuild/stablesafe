@@ -5,6 +5,7 @@ import { TableLandManager } from "./services/TableLandBrowser";
 import { OraclePriceComponent } from "./components/OraclePrice";
 import { Vote } from "./types";
 import { ClientList } from "./components/ClientList";
+import { VoteForm } from "./components/VoteForm";
 
 function Admin() {
   const isAdmin = true;
@@ -59,6 +60,7 @@ function Admin() {
       <div className="votes">
         {loading && <p>loading</p>}
         <VoteList votes={votes} />
+        {isAdmin && <VoteForm />}
       </div>
       {!isAdmin && (
         <div>
