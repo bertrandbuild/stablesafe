@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { Contact, IExecWeb3mail } from "@iexec/web3mail";
 
-const ADMIN_USER_ADDRESS = "0x754edfB906252B304f89c59c61f4368028bdcE6c";
-
 type VoteT = {
   notation: number,
   notation_reason: string

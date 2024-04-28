@@ -108,7 +108,6 @@ function SignUpComponent() {
 }
 
 function App() {
-  const isAdmin = false;
   return (
     <>
       <div className="header">
