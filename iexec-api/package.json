@@ -1,0 +1,13 @@
+{
+  "name": "iexec-api",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "dependencies": {
+    "@iexec/web3mail": "^0.6.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "graphql": "^16.8.1",
+    "serverless-http": "^3.1.1"
+  }
+}

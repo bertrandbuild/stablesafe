@@ -1,6 +1,7 @@
 import { Contact, IExecWeb3mail } from "@iexec/web3mail";
 import { useState, useEffect } from "react";
 import { getProvider } from "../services/provider";
+import { SEND_TO_ALL_URL } from "../constants";
 
 export function ClientList() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -41,7 +42,20 @@ export function ClientList() {
   };
 
   const sendEmailToAll = async () => {
-    console.log("sendEmailToAll: to be added");
+    const url = SEND_TO_ALL_URL;
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log(data);  // Handling the data from the response
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
   };
 
   useEffect(() => {

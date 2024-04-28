@@ -4,10 +4,6 @@ app: app-name
 service: service-name
 frameworkVersion: '3'
 
-package:
-  exclude:
-    - node_modules/**
-
 provider:
   name: aws
   runtime: nodejs18.x

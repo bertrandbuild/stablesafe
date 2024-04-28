@@ -6,8 +6,8 @@ A prediction market to alert you in case of depeg on stablecoins.
 
 ## Folder Architecture
 
-- [/autonomous-voter](./autonomous-voter/): the code to setup a remote who can run 24/7 
-- [/data](./data/) : contain various dataset and the list of events our 1st voter found during the backtesting analysis
+- [/autonomous-voter](./autonomous-voter/): the code to setup a remote voter who can run 24/7 
+- [/data](./data/) : contain various dataset and the list of events that our 1st voter found during the backtesting analysis
 - /src : the code of the frontend app
 
 ## Setup a voter
@@ -24,3 +24,5 @@ A prediction market to alert you in case of depeg on stablecoins.
 - setup the env variables using the template `cp .env.example .env`
 - build using : `yarn build`
 - start using : `yarn dev`
+- to have access to the sendToAllEmail feature, you also need to setup the [iexec-api](./iexec-api/) and host it online (one example url is provided but only works for the admin)
+- ps: on vercel a build error arise because of tableland, fix the error in local with `yarn build` then use : `vercel build` and deploy with `vercel --prebuilt` then promote to production

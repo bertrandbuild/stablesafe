@@ -1,0 +1,16 @@
+org: yobro
+app: depeg-alert
+service: iexec-api
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  environment: # TODO: add your env vars here
+    ADMIN_WALLET_PRIVATE_KEY: ""
+
+functions:
+  api:
+    handler: index.handler
+    events:
+      - httpApi: '*'
