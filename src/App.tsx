@@ -1,28 +1,22 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { IExecDataProtector } from "@iexec/dataprotector";
-import { IExecOracleManage } from "./services/iExecOracleBrowserReader.js";
+import { IExecOracleManager } from "./services/iExecOracleBrowserReader.ts";
+import { TableLandManager } from "./services/TableLandBrowser.ts";
 
 const ADMIN_USER_ADDRESS = "0x754edfB906252B304f89c59c61f4368028bdcE6c";
 const WEB3MAIL_APP_ADDRESS = "0x781482C39CcE25546583EaC4957Fb7Bf04C277D2";
 const chain = "bellecour";
 const EXPLORER_URL = `https://explorer.iex.ec/${chain}/dataset/`;
+const VOTES_CHAIN_URL =
+  "https://studio.tableland.xyz/builder/stablesafe/tables/default/vote_op_sepolia";
 
-type Vote = {
+export type Vote = {
+  uuid: string;
+  asset_id: number;
   notation: number;
   notation_reason: string;
 };
-
-const data: Vote[] = [
-  {
-    notation: 1,
-    notation_reason: "stable environment",
-  },
-  {
-    notation: 3,
-    notation_reason: "a depeg has been detected",
-  },
-];
 
 const getProvider = () => {
   const web3Provider = window.ethereum;
@@ -75,11 +69,19 @@ function SignUpComponent() {
       setLoading(true);
       const signupResult = await signup(email);
       setResultTxHash(signupResult);
+      setError("");
       setLoading(false);
     } catch (error: unknown) {
       setLoading(false);
       if (error instanceof Error) {
-        setError(error.message);
+        if (
+          error.message ===
+          "Signup process failed: WorkflowError: Protect data unexpected error"
+        ) {
+          setError("You need to connect with Metamask on the iExec chain.");
+        } else {
+          setError(error.message);
+        }
       } else {
         throw new Error(
           "An unexpected error occurred during the signup process."
@@ -114,37 +116,38 @@ function SignUpComponent() {
   );
 }
 
-function VoteList() {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [votes, setVotes] = useState<Vote[]>();
-
-  const fetchVotes = async () => {
-    setLoading(true);
-    const votes = data; // TODO: fetch from tableland
-    console.log("votes", votes);
-    setVotes(votes);
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchVotes();
-  }, []);
+function VoteListComponent({ votes }: { votes: Vote[] }) {
+  if (!votes || votes.length === 0) {
+    return <p>No vote yet</p>;
+  }
 
   return (
-    <div className="votes">
-      {loading && <p>loading</p>}
+    <>
       {votes && (
         <div>
-          <h4>Vote history</h4>
+          <h2>Vote history</h2>
           {votes.map((vote, index) => (
             <div className="list-elm" key={index}>
-              <h5>Notation : {vote.notation}/5</h5>
-              <p>Reason : {vote.notation_reason}</p>
+              <span className="row">
+                <h3>Risk score :</h3> {vote.notation}/5
+              </span>
+              <span className="row">
+                <h3>Reason :</h3> {vote.notation_reason}
+              </span>
             </div>
           ))}
+          <p>
+            All votes are stored on chain by permissionned voters:{" "}
+            <a target="_blank" href={VOTES_CHAIN_URL}>
+              see votes
+            </a>
+          </p>
+          <p>
+            <a href="./admin">Add a vote</a>
+          </p>
         </div>
       )}
-    </div>
+    </>
   );
 }
 
@@ -153,10 +156,13 @@ function OraclePriceComponent() {
   const [usdcPrice, setUsdcPrice] = useState<number>();
   const [error, setError] = useState<string>("");
 
-  async function getUsdcPrice() {
-    const oracleUsdc = new IExecOracleManage("bellecour", import.meta.env.VITE_ORACLE_CID);
+  async function getUsdcPrice(): Promise<number> {
+    const oracleUsdc = new IExecOracleManager(
+      "bellecour",
+      import.meta.env.VITE_ORACLE_CID
+    );
     const oraclePrice = await oracleUsdc.readOracle();
-    return oraclePrice.value;
+    return Number(oraclePrice.value);
   }
   useEffect(() => {
     setLoading(true);
@@ -177,9 +183,7 @@ function OraclePriceComponent() {
 
   return (
     <>
-      {usdcPrice && (
-        <h1>{usdcPrice}</h1>
-      )}
+      {usdcPrice && <h1>{usdcPrice}</h1>}
       {loading && <p>loading</p>}
       {error && <p>Error: {error}</p>}
     </>
@@ -187,6 +191,22 @@ function OraclePriceComponent() {
 }
 
 function App() {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [votes, setVotes] = useState<Vote[]>([]);
+  const tableLand = new TableLandManager();
+
+  const fetchVotes = async () => {
+    setLoading(true);
+    const votes = await tableLand.read();
+    console.log("votes", votes);
+    setVotes(votes);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchVotes();
+  }, []);
+
   return (
     <div>
       <div className="hero">
@@ -211,29 +231,24 @@ function App() {
           <div className="w50">
             <h2>Risk score</h2>
             <span className="risk-level">
-              <h1>
-                {data.reduce((sum, newVal) => sum + newVal.notation, 0) /
-                  data.length}
-              </h1>
+              <h1>{votes.length > 0 && votes[votes.length - 1].notation}</h1>
               <h3>/5</h3>
             </span>
           </div>
           <div className="w50">
             <h2>Summary</h2>
             <ul>
-              {data.map((item, index) => (
-                <li key={index}>{item.notation_reason}</li>
-              ))}
+              {votes.length > 0 && votes[votes.length - 1].notation_reason}
             </ul>
-            <p>
-              <a href="./admin">Add a vote</a>
-            </p>
           </div>
         </div>
         <p className="read-the-docs">Be notified if a risk appears</p>
         <SignUpComponent />
       </div>
-      <VoteList />
+      <div className="votes">
+        {loading && <p>loading</p>}
+        <VoteListComponent votes={votes} />
+      </div>
     </div>
   );
 }

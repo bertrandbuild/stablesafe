@@ -60,6 +60,12 @@ button {
   margin: 1em;
 }
 
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .hero {
   height: 100vh;
   padding-top: 3em

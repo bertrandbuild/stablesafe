@@ -3,14 +3,13 @@ import { IExecOracleReader } from '@iexec/iexec-oracle-factory-wrapper';
 /**
  * Price oracle using iExec
  */
-export class IExecOracleManage {
+export class IExecOracleManager {
   chain: string;
   oracleCid: string;
   reader: IExecOracleReader;
   constructor(chain: string, oracleCid: string) {
     this.chain = chain;
     this.oracleCid = oracleCid;
-    console.log(this.oracleCid);
     this.reader = new IExecOracleReader(this.chain);
   }
 

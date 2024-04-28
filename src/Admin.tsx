@@ -77,7 +77,6 @@ function ClientList() {
       {loading && <p>loading</p>}
       {clients && (
         <div>
-          <h4>Subscribers</h4>
           {clients && (
             <div>
               <button className="red" onClick={sendEmailToAll}>
@@ -151,7 +150,7 @@ function Admin() {
       )}
       {isAdmin && (
         <>
-          <h2>Admin</h2>
+          <h2>Subscribers</h2>
           <ClientList />
         </>
       )}
