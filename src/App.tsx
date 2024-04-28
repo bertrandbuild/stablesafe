@@ -1,13 +1,23 @@
-import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useState } from "react";
 import "./App.css";
 import { IExecDataProtector } from "@iexec/dataprotector";
-import { Contact, IExecWeb3mail } from "@iexec/web3mail";
 
 const ADMIN_USER_ADDRESS = "0x754edfB906252B304f89c59c61f4368028bdcE6c";
 const WEB3MAIL_APP_ADDRESS = "0x781482C39CcE25546583EaC4957Fb7Bf04C277D2";
 const EXPLORER_URL = "https://explorer.iex.ec/bellecour/dataset/";
+
+type VoteT = {
+  notation: number,
+  notation_reason: string
+}
+
+const data: VoteT[] = [{
+  notation: 1,
+  notation_reason: "stable environment"
+}, {
+  notation: 3,
+  notation_reason: "a depeg has been detected"
+}]
 
 const getProvider = () => {
   const web3Provider = window.ethereum;
@@ -20,11 +30,6 @@ const getProvider = () => {
 async function initDataProtector() {
   const web3Provider = getProvider();
   return new IExecDataProtector(web3Provider);
-}
-
-async function initWeb3mail() {
-  const web3Provider = getProvider();
-  return new IExecWeb3mail(web3Provider);
 }
 
 // Signup : Protect email and grant access to web3mail app
@@ -102,83 +107,38 @@ function SignUpComponent() {
   );
 }
 
-function ClientList() {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [clients, setClients] = useState<Contact[]>();
-
-  const fetchClient = async () => {
-    setLoading(true);
-    const web3mail = await initWeb3mail();
-    if (!web3mail) {
-      throw new Error("Web3mail is not available.");
-    }
-    const contactsList = await web3mail.fetchMyContacts();
-    console.log("contactsList", contactsList);
-    setClients(contactsList);
-    setLoading(false);
-  };
-
-  const sendEmail = async (protectedAddress: string) => {
-    const web3mail = await initWeb3mail();
-    if (!web3mail) {
-      throw new Error("Web3mail is not available.");
-    }
-
-    await web3mail.sendEmail({
-      protectedData: protectedAddress,
-      emailSubject: "Depeg Alert - USDC is falling",
-      emailContent: "The usdc price is de-pegging. Please check the price on the website.",
-      contentType: "text/html",
-      senderName: "Depeg Alert team"
-    });
-    console.log("sendEmail", sendEmail);
-  } 
-
-  useEffect(() => {
-    fetchClient();
-  }, []);
-
-  return (
-    <div>
-      <button onClick={fetchClient}>Fetch Clients</button>
-      {loading && <p>loading</p>}
-      {clients && (
-        <div>
-          <h4>My Contacts</h4>
-          {clients.map((client) => (
-            <div key={client.address}>
-              <h5>{client.address}</h5>
-              <button onClick={() => sendEmail(client.address)}>Send Email</button>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
 function App() {
-  const isAdmin = true;
+  const isAdmin = false;
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="header">
+        <span>
+          <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Flogos-download.com%2Fwp-content%2Fuploads%2F2022%2F01%2FUSD_Coin_USDC_Logo.png" className="logo" alt="Vite logo" />
+        </span>
+        <h1>Usdc Status</h1>
       </div>
-      <h1>Depeg Alert</h1>
+      <div className="grid">
+        <div className="w50">
+          <h2>Risk score</h2>
+          <span className="risk-level">
+            <h1>{data.reduce((sum, newVal) => sum + newVal.notation, 0) / data.length}</h1>
+            <h3>/5</h3>
+          </span>
+        </div>
+        <div className="w50">
+          <h2>Summary</h2>
+          <ul>
+            {data.map((item, index) => (
+              <li key={index}>{item.notation_reason}</li>
+            ))}
+          </ul>
+          <p><a href="./admin">Add a vote</a></p>
+        </div>
+      </div>
       <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
+        Be notified if a risk appears
       </p>
       <SignUpComponent />
-      {isAdmin && 
-      <><h2>Admin</h2>
-        <ClientList />
-      </>
-      }
     </>
   );
 }
