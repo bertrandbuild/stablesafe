@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import "../styles/App.css";
 import { TableLandManager } from "../services/TableLandBrowser.ts";
-import { Vote } from "../types.ts";
+import { Prediction } from "../types.ts";
 import { VoteList } from "../components/VoteList.tsx";
 import { SignUpComponent } from "../components/SignUp.tsx";
 import { OraclePriceComponent } from "../components/OraclePrice.tsx";
 
 function App() {
   const [loading, setLoading] = useState<boolean>(false);
-  const [votes, setVotes] = useState<Vote[]>([]);
+  const [votes, setVotes] = useState<Prediction[]>([]);
   const tableLand = new TableLandManager();
 
   const fetchVotes = async () => {
@@ -21,7 +21,7 @@ function App() {
 
   useEffect(() => {
     fetchVotes();
-  }, []);
+  });
 
   return (
     <div>

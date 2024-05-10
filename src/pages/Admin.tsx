@@ -3,14 +3,14 @@ import "../styles/App.css";
 import { VoteList } from "../components/VoteList";
 import { TableLandManager } from "../services/TableLandBrowser";
 import { OraclePriceComponent } from "../components/OraclePrice";
-import { Vote } from "../types";
+import { Prediction } from "../types";
 import { ClientList } from "../components/ClientList";
 import { VoteForm } from "../components/VoteForm";
 
 function Admin() {
   const isAdmin = true;
   const [loading, setLoading] = useState<boolean>(false);
-  const [votes, setVotes] = useState<Vote[]>([]);
+  const [votes, setVotes] = useState<Prediction[]>([]);
   const tableLand = new TableLandManager();
 
   const fetchVotes = async () => {
@@ -23,7 +23,7 @@ function Admin() {
 
   useEffect(() => {
     fetchVotes();
-  }, []);
+  });
 
   return (
     <>

@@ -1,4 +1,4 @@
-export type Vote = {
+export type Prediction = {
     uuid: string;
     asset_id: number;
     notation: number;

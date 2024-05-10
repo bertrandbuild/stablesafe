@@ -1,6 +1,6 @@
 import { Database } from "@tableland/sdk";
 import { Wallet, getDefaultProvider } from "ethers";
-import { Vote } from "../types";
+import { Prediction } from "../types";
 import { TABLE_NAME, USDC_ASSET_ID } from "../constants";
 
 const KEY = import.meta.env.VITE_KEY;
@@ -8,12 +8,12 @@ const providerUrl = import.meta.env.VITE_PUBLIC_INFURA_URL + import.meta.env.VIT
 
 export class TableLandManager {
   signer: Wallet;
-  db: Database<Vote>;
+  db: Database<Prediction>;
   constructor() {
     const wallet = new Wallet(KEY);
     const provider = getDefaultProvider(providerUrl);
     this.signer = wallet.connect(provider);
-    this.db = new Database<Vote>({ signer: this.signer });
+    this.db = new Database<Prediction>({ signer: this.signer });
   }
 
   generateUUID = () => {
@@ -25,8 +25,8 @@ export class TableLandManager {
     return uuid;
   }
 
-  async read(): Promise<Vote[]> {
-    const { results } = await this.db.prepare(`SELECT * FROM ${TABLE_NAME};`).all<Vote>();
+  async read(): Promise<Prediction[]> {
+    const { results } = await this.db.prepare(`SELECT * FROM ${TABLE_NAME};`).all<Prediction>();
     return results;
   }
 

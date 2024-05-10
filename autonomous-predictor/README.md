@@ -1,10 +1,10 @@
-# Autonomous voter template
+# Autonomous predictor template
 
-This template demonstrates how to setup a voter and contributer to the StableSafe project.
+This template demonstrates how to setup a predictor and contributer to the StableSafe project.
 
 ## Get a backtesting history to be verified
 
-Only permissionned voters can contribute to the depeg detection. 
+Only permissionned predictors can contribute to the depeg detection. 
 
 To be verified, you need to submit a backtesting history.
 

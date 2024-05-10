@@ -1,7 +1,7 @@
 import { VOTES_CHAIN_URL } from "../constants";
-import { Vote } from "../types";
+import { Prediction } from "../types";
 
-export function VoteList({ votes }: { votes: Vote[] }) {
+export function VoteList({ votes }: { votes: Prediction[] }) {
   if (!votes || votes.length === 0) {
     return <p>No vote yet</p>;
   }
