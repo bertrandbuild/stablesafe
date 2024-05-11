@@ -1,27 +1,39 @@
 import { useEffect, useState } from "react";
 import "../styles/App.css";
-import { TableLandManager } from "../services/TableLandBrowser";
 import { OraclePriceComponent } from "../components/OraclePrice";
 import { Prediction } from "../types";
 import { ClientList } from "../components/ClientList";
 import { VoteForm } from "../components/VoteForm";
+import { getAllPredictionIds, isWhitelisted, readPrediction } from "../services/DymensionPredictions";
+import { BigNumber, ethers } from "ethers";
 
 function Admin() {
-  const isAdmin = true;
   const [loading, setLoading] = useState<boolean>(false);
-  const [votes, setVotes] = useState<Prediction[]>([]);
-  const tableLand = new TableLandManager();
+  const [predictions, setPredictions] = useState<Prediction[]>([]);
+  const [isWhitelist, setIsWhitelist] = useState<boolean>(false);
 
-  const fetchVotes = async () => {
+  const fetchPredictions = async () => {
     setLoading(true);
-    const votes = await tableLand.read();
-    console.log("votes", votes);
-    setVotes(votes);
+    const predictionIds = await getAllPredictionIds();
+    const predictions = await Promise.all(
+      predictionIds.map(async (predictionIdBN: BigNumber) => {
+        const predictionId = ethers.BigNumber.from(predictionIdBN._hex).toNumber();
+        const prediction = await readPrediction(predictionId);
+        return prediction;
+      })
+    );
+    setPredictions(predictions);
     setLoading(false);
   };
 
+  const init = async() => {
+    fetchPredictions();
+    const whitelist = await isWhitelisted();
+    setIsWhitelist(whitelist);
+  }
+
   useEffect(() => {
-    fetchVotes();
+    init();
   }, []);
 
   return (
@@ -47,33 +59,38 @@ function Admin() {
         <div className="w50">
           <h2>Risk score</h2>
           <span className="risk-level">
-            <h1>{votes.length > 0 && votes[votes.length - 1].notation}</h1>
+            <h1>{predictions.length > 0 && predictions[predictions.length - 1].notation}</h1>
             <h3>/5</h3>
           </span>
         </div>
         <div className="w50">
           <h2>Summary</h2>
-          <ul>{votes.length > 0 && votes[votes.length - 1].notationReason}</ul>
+          <ul>{predictions.length > 0 && predictions[predictions.length - 1].notationReason}</ul>
         </div>
       </div>
       <div className="votes">
         {loading && <p>loading</p>}
-        {isAdmin && <VoteForm />}
+        {isWhitelist && <VoteForm />}
       </div>
-      {!isAdmin && (
+      {!isWhitelist && (
         <div>
           <p>
-            You are not allowed to add a vote.
+            You are not a verifies predictor.
+          </p>
+          <p>
+            To be whitelisted, submit a community request on the {" "}
+            <a href="https://testnet.dymension.xyz/rollapp/rolx_100004-1/governance" target="_blank">
+              Dymension governance server
+            </a>
             <br />
-            You can{" "}
-            <a href="https://x.com/bertrandbuild" target="_blank">
-              make a request
-            </a>{" "}
-            to become a voter.
+            Learn more to {" "}
+            <a href="https://github.com/bertrandbuild/stablesafe/tree/main/autonomous-voter" target="_blank">
+              setup an autonomous predictor.
+            </a>
           </p>
         </div>
       )}
-      {isAdmin && (
+      {isWhitelist && (
         <>
           <h2>Subscribers</h2>
           <ClientList />

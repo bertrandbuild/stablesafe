@@ -17,6 +17,17 @@ export async function getAllPredictionIds() {
   }
 }
 
+export async function isWhitelisted() {
+  const address = await wallet.getAddress();
+  try {
+      const isWhitelisted = await predictionContract.whitelist(address);
+      console.log('is whitelisted:', isWhitelisted);
+      return isWhitelisted;
+  } catch (error) {
+      console.error('Error reading from the contract:', error);
+  }
+}
+
 export async function readPrediction(id: number) {
   const address = await wallet.getAddress();
   console.log('Address:', address);
