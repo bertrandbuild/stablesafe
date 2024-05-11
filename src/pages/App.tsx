@@ -64,7 +64,6 @@ function App() {
             </ul>
           </div>
         </div>
-        <p className="read-the-docs">Be notified if a risk appears</p>
         <SignUpComponent />
       </div>
       <div className="votes">

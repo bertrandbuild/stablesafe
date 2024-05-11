@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { IEXEC_API_URL, IEXEC_EXPLORER_URL } from "../utils/constants";
 
 // Signup : Protect email and grant access to web3mail app
@@ -29,7 +29,8 @@ export function SignUpComponent() {
   const [resultTxHash, setResultTxHash] = useState<string>("");
   const [error, setError] = useState<string>("");
 
-  const handleSignUp = async () => {
+  const handleSignUp = async (e: FormEvent) => {
+    e.preventDefault();
     try {
       setLoading(true);
       const signupResult = await signup(email);
@@ -58,24 +59,31 @@ export function SignUpComponent() {
 
   return (
     <div>
-      <input
-        type="text"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Enter your email"
-      />
-      <button onClick={handleSignUp} style={{ backgroundColor: "#76f574" }}>
-        Sign Up
-      </button>
+      {!resultTxHash && (
+        <form onSubmit={handleSignUp}>
+          <p className="read-the-docs">Be notified if a risk appears</p>
+          <input
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+          />
+          <button onClick={handleSignUp}>
+            Sign Up
+          </button>
+        </form>
+      )}
       {loading && <p>loading</p>}
       {error && <p>Error: {error}</p>}
       {resultTxHash && (
         <div>
-          <h4>Private Signup Successful</h4>
+          <h1>We got you covered ! </h1>
+          <img className="covered-img" src="https://uploads-ssl.webflow.com/663c84182f79d7bbfdc5126b/663c84182f79d7bbfdc51291_Verified.png" />
+          <h4>Private Signup Successful, if something happens you will instantly get notified</h4>
           <p>
-            You can check the transaction proof on the{" "}
+            Your email is keep private and secure by {" "}
             <a target="_blank" href={IEXEC_EXPLORER_URL + resultTxHash}>
-              iExec chain explorer
+              iExec web3mail
             </a>
           </p>
         </div>

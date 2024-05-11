@@ -77,7 +77,7 @@ button {
 }
 
 .votes {
-  margin-bottom: 5em;
+  margin-bottom: 15em;
 }
 
 .form-group {
@@ -94,6 +94,15 @@ button {
 .form-group input, .form-group button, .form-group textarea {
   width: 50%;
   margin: 2em;
+}
+
+form button {
+  background-color: #76f574;
+  color: #100;
+}
+
+.covered-img {
+  width: 30%;
 }
 
 ul {
