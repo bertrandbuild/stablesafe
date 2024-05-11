@@ -4,10 +4,12 @@ pragma solidity ^0.8.13;
 import "openzeppelin-contracts/contracts/access/Ownable.sol";
 
 contract PredictionContract is Ownable {
-    constructor(address initialOwner) Ownable(initialOwner) {}
+    constructor(address initialOwner) Ownable(initialOwner) {
+        currentId = 1;
+    }
 
     struct Prediction {
-        bytes32 uuid;
+        uint256 id;
         uint256 date;
         uint256 assetId;
         address predictor;
@@ -15,11 +17,15 @@ contract PredictionContract is Ownable {
         string notationReason;
     }
 
-    mapping(bytes32 => Prediction) public predictions;
+    mapping(uint256 => Prediction) public predictions;
     mapping(address => bool) public whitelist;
-    mapping(uint256 => bytes32[]) public assetPredictions;
+    mapping(uint256 => uint256[]) public assetPredictions;
 
-    bytes32[] public predictionIds;
+    uint256[] public predictionIds;
+    uint256 private currentId;
+
+    event PredictionAdded(uint256 indexed id, address indexed predictor);
+    event Whitelisted(address indexed account, bool status);
 
     modifier onlyWhitelisted() {
         require(whitelist[msg.sender], "Not whitelisted");
@@ -28,20 +34,20 @@ contract PredictionContract is Ownable {
 
     function addToWhitelist(address _addr) public onlyOwner {
         whitelist[_addr] = true;
+        emit Whitelisted(_addr, true);
     }
 
     function addPrediction(
-        bytes32 _uuid,
         uint256 _date,
         uint256 _assetId,
         uint8 _notation,
         string memory _notationReason
     ) public onlyWhitelisted {
         require(_notation >= 1 && _notation <= 5, "Invalid notation");
-        require(predictions[_uuid].uuid == 0, "UUID already exists");
+        uint256 newId = currentId++;
 
         Prediction memory newPrediction = Prediction({
-            uuid: _uuid,
+            id: newId,
             date: _date,
             assetId: _assetId,
             predictor: msg.sender,
@@ -49,18 +55,20 @@ contract PredictionContract is Ownable {
             notationReason: _notationReason
         });
 
-        predictions[_uuid] = newPrediction;
-        predictionIds.push(_uuid);
-        assetPredictions[_assetId].push(_uuid);
+        predictions[newId] = newPrediction;
+        predictionIds.push(newId);
+        assetPredictions[_assetId].push(newId);
+
+        emit PredictionAdded(newId, msg.sender);
     }
 
     function getPrediction(
-        bytes32 _uuid
+        uint256 _id
     ) public view returns (Prediction memory) {
-        return predictions[_uuid];
+        return predictions[_id];
     }
 
-    function getAllPredictionIds() public view returns (bytes32[] memory) {
+    function getAllPredictionIds() public view returns (uint256[] memory) {
         return predictionIds;
     }
 }

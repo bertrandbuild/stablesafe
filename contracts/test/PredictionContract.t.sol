@@ -24,15 +24,14 @@ contract PredictionContractTest is Test {
 
     function testAddPrediction() public {
         vm.prank(addr1);
-        bytes32 uuid = bytes32("uuid1");
+        uint256 current_id = 1;
         predictionContract.addPrediction(
-            uuid,
             block.timestamp,
             1,
             5,
             "Huge depeg ! Risk is 5/5"
         );
-        PredictionContract.Prediction memory prediction = predictionContract.getPrediction(uuid);
+        PredictionContract.Prediction memory prediction = predictionContract.getPrediction(current_id);
         assertEq(prediction.predictor, addr1);
         assertEq(prediction.notation, 5);
         assertEq(prediction.date, block.timestamp);
@@ -43,7 +42,6 @@ contract PredictionContractTest is Test {
     function testFailAddPredictionByNonWhitelisted() public {
         vm.prank(addr2);
         predictionContract.addPrediction(
-            bytes32("uuid2"),
             block.timestamp,
             1,
             5,
