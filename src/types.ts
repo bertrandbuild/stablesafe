@@ -1,6 +1,10 @@
 export type Prediction = {
     uuid: string;
-    asset_id: number;
+    date: number;
+    predictor: string;
+    assetId: number;
     notation: number;
-    notation_reason: string;
+    notationReason: string;
 };
+
+export type PredictionForm = Omit<Prediction, 'predictor' | 'uuid'>;
