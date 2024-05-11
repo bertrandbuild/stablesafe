@@ -17,16 +17,17 @@ export function VoteList({ votes }: { votes: Prediction[] }) {
                 <h3>Risk score :</h3> {vote.notation}/5
               </span>
               <span className="row">
-                <h3>Reason :</h3> {vote.notation_reason}
+                <h3>Reason :</h3> {vote.notationReason}
               </span>
             </div>
           ))}
-          <p>
+          {/* TODO: add a link to the hash of the vote */}
+          {/* <p> 
             All votes are stored on chain by permissionned voters:{" "}
             <a target="_blank" href={VOTES_CHAIN_URL}>
               see votes
             </a>
-          </p>
+          </p> */}
           <p>
             <a href="./admin">Add a vote</a>
           </p>

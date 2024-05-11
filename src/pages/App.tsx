@@ -1,27 +1,33 @@
 import { useEffect, useState } from "react";
 import "../styles/App.css";
-import { TableLandManager } from "../services/TableLandBrowser.ts";
 import { Prediction } from "../types.ts";
 import { VoteList } from "../components/VoteList.tsx";
 import { SignUpComponent } from "../components/SignUp.tsx";
 import { OraclePriceComponent } from "../components/OraclePrice.tsx";
+import { getAllPredictionIds, readPrediction } from "../services/DymensionPredictions.ts";
+import { BigNumber, ethers } from "ethers";
 
 function App() {
   const [loading, setLoading] = useState<boolean>(false);
-  const [votes, setVotes] = useState<Prediction[]>([]);
-  const tableLand = new TableLandManager();
+  const [predictions, setPredictions] = useState<Prediction[]>([]);
 
-  const fetchVotes = async () => {
+  const fetchPredictions = async () => {
     setLoading(true);
-    const votes = await tableLand.read();
-    console.log("votes", votes);
-    setVotes(votes);
+    const predictionIds = await getAllPredictionIds();
+    const predictions = await Promise.all(
+      predictionIds.map(async (predictionIdBN: BigNumber) => {
+        const predictionId = ethers.BigNumber.from(predictionIdBN._hex).toNumber();
+        const prediction = await readPrediction(predictionId);
+        return prediction;
+      })
+    );
+    setPredictions(predictions);
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchVotes();
-  });
+    fetchPredictions();
+  }, []);
 
   return (
     <div>
@@ -47,14 +53,14 @@ function App() {
           <div className="w50">
             <h2>Risk score</h2>
             <span className="risk-level">
-              <h1>{votes.length > 0 && votes[votes.length - 1].notation}</h1>
+              <h1>{predictions.length > 0 && predictions[predictions.length - 1].notation}</h1>
               <h3>/5</h3>
             </span>
           </div>
           <div className="w50">
             <h2>Summary</h2>
             <ul>
-              {votes.length > 0 && votes[votes.length - 1].notation_reason}
+              {predictions.length > 0 && predictions[predictions.length - 1].notationReason}
             </ul>
           </div>
         </div>
@@ -63,7 +69,7 @@ function App() {
       </div>
       <div className="votes">
         {loading && <p>loading</p>}
-        <VoteList votes={votes} />
+        <VoteList votes={predictions} />
       </div>
     </div>
   );

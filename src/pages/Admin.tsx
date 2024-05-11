@@ -53,7 +53,7 @@ function Admin() {
         </div>
         <div className="w50">
           <h2>Summary</h2>
-          <ul>{votes.length > 0 && votes[votes.length - 1].notation_reason}</ul>
+          <ul>{votes.length > 0 && votes[votes.length - 1].notationReason}</ul>
         </div>
       </div>
       <div className="votes">
