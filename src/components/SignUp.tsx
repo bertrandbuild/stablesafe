@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IEXEC_EXPLORER_URL } from "../constants";
+import { IEXEC_EXPLORER_URL } from "../utils/constants";
 import { IExecDataProtectorManager } from "../services/iExecDataProtector";
 
 // Signup : Protect email and grant access to web3mail app
@@ -36,6 +36,7 @@ export function SignUpComponent() {
         if (
           error.message ===
           "Signup process failed: WorkflowError: Protect data unexpected error"
+          || error.message === "Protect data unexpected error"
         ) {
           setError("You need to connect with Metamask on the iExec chain.");
         } else {

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import "../styles/App.css";
-import { VoteList } from "../components/VoteList";
 import { TableLandManager } from "../services/TableLandBrowser";
 import { OraclePriceComponent } from "../components/OraclePrice";
 import { Prediction } from "../types";
@@ -23,7 +22,7 @@ function Admin() {
 
   useEffect(() => {
     fetchVotes();
-  });
+  }, []);
 
   return (
     <>
@@ -59,7 +58,6 @@ function Admin() {
       </div>
       <div className="votes">
         {loading && <p>loading</p>}
-        <VoteList votes={votes} />
         {isAdmin && <VoteForm />}
       </div>
       {!isAdmin && (

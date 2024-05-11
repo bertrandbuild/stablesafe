@@ -1,7 +1,7 @@
 import { Contact, IExecWeb3mail } from "@iexec/web3mail";
 import { useState, useEffect } from "react";
 import { getProvider } from "../services/provider";
-import { SEND_TO_ALL_URL } from "../constants";
+import { SEND_TO_ALL_URL } from "../utils/constants";
 
 export function ClientList() {
   const [loading, setLoading] = useState<boolean>(false);

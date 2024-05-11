@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { IExecOracleManager } from "../services/iExecOracleBrowserReader.ts";
-import { ORACLE_CID } from "../constants.ts";
+import { ORACLE_CID } from "../utils/constants.ts";
 
 export function OraclePriceComponent() {
   const [loading, setLoading] = useState<boolean>(false);

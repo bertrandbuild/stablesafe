@@ -1,5 +1,5 @@
 import { IExecDataProtector } from "@iexec/dataprotector";
-import { WEB3MAIL_APP_ADDRESS, ADMIN_USER_ADDRESS } from "../constants";
+import { WEB3MAIL_APP_ADDRESS, ADMIN_USER_ADDRESS } from "../utils/constants";
 import { getProvider } from "./provider";
 
 export class IExecDataProtectorManager {

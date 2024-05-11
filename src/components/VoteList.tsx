@@ -1,4 +1,4 @@
-import { VOTES_CHAIN_URL } from "../constants";
+import { VOTES_CHAIN_URL } from "../utils/constants";
 import { Prediction } from "../types";
 
 export function VoteList({ votes }: { votes: Prediction[] }) {
