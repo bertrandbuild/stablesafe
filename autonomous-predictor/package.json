@@ -8,7 +8,6 @@
   "dependencies": {
     "@iexec/iexec-oracle-factory-wrapper": "^2.1.0",
     "@iexec/web3mail": "^0.6.1",
-    "@tableland/sdk": "^6.0.0",
     "dotenv": "^16.4.5",
     "ethers": "^5.7.2",
     "graphql": "^16.8.1"

@@ -51,7 +51,8 @@ export class IExecOracleManage {
             console.log("error", error);
             reject(error);
           },
-          complete: () => {
+          complete: (data) => {
+            console.log(`Oracle update with function "${context.functionName}" ran at ${new Date()} with task id ${data.taskid}`);
             resolve('Update completed successfully');
           }
         });
