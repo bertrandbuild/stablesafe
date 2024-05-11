@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../styles/App.css";
 import { Prediction } from "../types.ts";
-import { VoteList } from "../components/VoteList.tsx";
+import { PredictionList } from "../components/PredictionList.tsx";
 import { SignUpComponent } from "../components/SignUp.tsx";
 import { OraclePriceComponent } from "../components/OraclePrice.tsx";
 import { getAllPredictionIds, readPrediction } from "../services/DymensionPredictions.ts";
@@ -69,7 +69,7 @@ function App() {
       </div>
       <div className="votes">
         {loading && <p>loading</p>}
-        <VoteList votes={predictions} />
+        <PredictionList votes={predictions} />
       </div>
     </div>
   );

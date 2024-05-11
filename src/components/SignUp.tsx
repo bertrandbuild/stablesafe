@@ -1,20 +1,26 @@
 import { useState } from "react";
-import { IEXEC_EXPLORER_URL } from "../utils/constants";
-import { IExecDataProtectorManager } from "../services/iExecDataProtector";
+import { IEXEC_API_URL, IEXEC_EXPLORER_URL } from "../utils/constants";
 
 // Signup : Protect email and grant access to web3mail app
 async function signup(email: string): Promise<string> {
   console.log("Signing up :", email);
-  const dataProtector = new IExecDataProtectorManager();
-  if (!dataProtector) {
-    throw new Error("Data protector is not available.");
-  }
-  try {
-    const tx = dataProtector.protectEmailAndGrantAccess(email);
-    return tx;
-  } catch (error) {
-    throw new Error("Signup process failed: " + error);
-  }
+
+  const url = IEXEC_API_URL;
+  return fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({email}),
+  })
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const { data } = await response.json();
+      return data.dataset;
+    })
+    .catch((error) => {
+      console.error("There was a problem with the fetch operation:", error);
+    });
 }
 
 export function SignUpComponent() {
@@ -35,8 +41,8 @@ export function SignUpComponent() {
       if (error instanceof Error) {
         if (
           error.message ===
-          "Signup process failed: WorkflowError: Protect data unexpected error"
-          || error.message === "Protect data unexpected error"
+            "Signup process failed: WorkflowError: Protect data unexpected error" ||
+          error.message === "Protect data unexpected error"
         ) {
           setError("You need to connect with Metamask on the iExec chain.");
         } else {
@@ -58,7 +64,9 @@ export function SignUpComponent() {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Enter your email"
       />
-      <button onClick={handleSignUp}>Sign Up</button>
+      <button onClick={handleSignUp} style={{ backgroundColor: "#76f574" }}>
+        Sign Up
+      </button>
       {loading && <p>loading</p>}
       {error && <p>Error: {error}</p>}
       {resultTxHash && (

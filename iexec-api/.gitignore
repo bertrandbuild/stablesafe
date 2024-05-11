@@ -1,3 +1,5 @@
 node_modules
 .serverless
 serverless.yml
+bundle-analysis.html
+.vercel
