@@ -1,6 +1,6 @@
 import { Prediction } from "../types";
 
-export function VoteList({ votes }: { votes: Prediction[] }) {
+export function PredictionList({ votes }: { votes: Prediction[] }) {
   if (!votes || votes.length === 0) {
     return <p>No vote yet</p>;
   }

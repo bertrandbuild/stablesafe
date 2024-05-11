@@ -1,20 +1,24 @@
 import { useState } from "react";
-import { TableLandManager } from "../services/TableLandBrowser";
+import { addPrediction } from "../services/DymensionPredictions";
 
-export function VoteForm() {
+export function PredictionForm() {
   const [loading, setLoading] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const tableLand = new TableLandManager();
   const submitVote = async (notation: string, notationReason: string) => {
     setLoading(true);
-    const vote = await tableLand.insertNotation(notation, notationReason);
-    console.log("vote", vote);
+    const prediction = await addPrediction({
+      date: new Date().getTime(),
+      assetId: 1,
+      notation: Number(notation),
+      notationReason
+    });
+    console.log("prediction", prediction);
     setIsSubmitted(true);
     setLoading(false);
   };
   return (
     <>
-      <h2>Vote</h2>
+      <h2>Add a prediction</h2>
       <form
         onSubmit={(event) => {
           event.preventDefault();
@@ -32,7 +36,7 @@ export function VoteForm() {
         <div className="form-group">
           {isSubmitted && (
             <div className="alert alert-success" role="alert">
-              Your vote has been submitted!
+              Your prediction has been submitted!
             </div>
           )}
           {!isSubmitted && (
@@ -49,7 +53,7 @@ export function VoteForm() {
           )}
           {loading && (
             <div className="alert alert-info" role="alert">
-              Submitting your vote...
+              Submitting your prediction...
             </div>
           )}
         </div>

@@ -3,7 +3,7 @@ import "../styles/App.css";
 import { OraclePriceComponent } from "../components/OraclePrice";
 import { Prediction } from "../types";
 import { ClientList } from "../components/ClientList";
-import { VoteForm } from "../components/VoteForm";
+import { PredictionForm } from "../components/PredictionForm";
 import { getAllPredictionIds, isWhitelisted, readPrediction } from "../services/DymensionPredictions";
 import { BigNumber, ethers } from "ethers";
 
@@ -70,7 +70,7 @@ function Admin() {
       </div>
       <div className="votes">
         {loading && <p>loading</p>}
-        {isWhitelist && <VoteForm />}
+        {isWhitelist && <PredictionForm />}
       </div>
       {!isWhitelist && (
         <div>
