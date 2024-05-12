@@ -1,13 +1,15 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import "openzeppelin-contracts/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "./PayableContract.sol";
 
 /**
  * @title PredictionContract
  * @dev A contract that allows whitelisted users to add predictions and manage them.
  */
-contract PredictionContract is Ownable {
+contract PredictionContract is Ownable, ReentrancyGuard, PayableContract {
     /// @notice The current prediction ID counter
     uint256 private currentId;
 
