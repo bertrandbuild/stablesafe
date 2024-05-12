@@ -6,6 +6,10 @@ import { SignUpComponent } from "../components/SignUp.tsx";
 import { OraclePriceComponent } from "../components/OraclePrice.tsx";
 import { getAllPredictionIds, readPrediction } from "../services/DymensionPredictions.ts";
 import { BigNumber, ethers } from "ethers";
+import { init } from "../utils/init.ts";
+import { ADMIN_USER_ADDRESS } from "../utils/constants.ts";
+
+init(ADMIN_USER_ADDRESS);
 
 function App() {
   const [loading, setLoading] = useState<boolean>(false);

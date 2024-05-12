@@ -1,5 +1,10 @@
 import { FormEvent, useState } from "react";
-import { IEXEC_API_URL, IEXEC_EXPLORER_URL } from "../utils/constants";
+import {
+  DYMENSION_EXPLORER_URL,
+  IEXEC_API_URL,
+  IEXEC_EXPLORER_URL,
+} from "../utils/constants";
+import { authorizeAndSubscribe } from "../services/DymensionPredictions";
 
 // Signup : Protect email and grant access to web3mail app
 async function signup(email: string): Promise<string> {
@@ -9,7 +14,7 @@ async function signup(email: string): Promise<string> {
   return fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({email}),
+    body: JSON.stringify({ email }),
   })
     .then(async (response) => {
       if (!response.ok) {
@@ -26,15 +31,21 @@ async function signup(email: string): Promise<string> {
 export function SignUpComponent() {
   const [email, setEmail] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [resultTxHash, setResultTxHash] = useState<string>("");
+  const [mailTxHash, setMailTxHash] = useState<string>("");
+  const [tokenTxHash, setTokenTxHash] = useState<string>("");
   const [error, setError] = useState<string>("");
 
   const handleSignUp = async (e: FormEvent) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const signupResult = await signup(email);
-      setResultTxHash(signupResult);
+
+      const tokenTransferTx = await authorizeAndSubscribe();
+      const mailSignupTx = await signup(email);
+
+      setMailTxHash(mailSignupTx);
+      setTokenTxHash(tokenTransferTx.hash);
+
       setError("");
       setLoading(false);
     } catch (error: unknown) {
@@ -59,7 +70,7 @@ export function SignUpComponent() {
 
   return (
     <div>
-      {!resultTxHash && (
+      {!(tokenTxHash && mailTxHash) && (
         <form onSubmit={handleSignUp}>
           <p className="read-the-docs">Be notified if a risk appears</p>
           <input
@@ -68,22 +79,36 @@ export function SignUpComponent() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
           />
-          <button onClick={handleSignUp}>
-            Sign Up
-          </button>
+          <button onClick={handleSignUp}>Sign Up</button>
         </form>
       )}
       {loading && <p>loading</p>}
       {error && <p>Error: {error}</p>}
-      {resultTxHash && (
+      {tokenTxHash && mailTxHash && (
         <div>
+          <img
+            className="covered-img"
+            src="https://uploads-ssl.webflow.com/663c84182f79d7bbfdc5126b/663c84182f79d7bbfdc51291_Verified.png"
+          />
           <h1>We got you covered ! </h1>
-          <img className="covered-img" src="https://uploads-ssl.webflow.com/663c84182f79d7bbfdc5126b/663c84182f79d7bbfdc51291_Verified.png" />
-          <h4>Private Signup Successful, if something happens you will instantly get notified</h4>
+          <h4>
+            Private Signup Successful, if something happens you will instantly
+            get notified
+          </h4>
           <p>
-            Your email is keep private and secure by {" "}
-            <a target="_blank" href={IEXEC_EXPLORER_URL + resultTxHash}>
+            Your email is keep private and secure by{" "}
+            <a target="_blank" href={IEXEC_EXPLORER_URL + mailTxHash}>
               iExec web3mail
+            </a>
+          </p>
+          <p>
+            Your ROLLX subscription has been validated on the Dymension's chain{" "}
+            <a
+              href={DYMENSION_EXPLORER_URL + tokenTxHash}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              see the details
             </a>
           </p>
         </div>

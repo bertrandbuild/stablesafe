@@ -11,6 +11,7 @@ export const VOTES_CHAIN_URL = import.meta.env.VITE_VOTES_CHAIN_URL
 export const TABLE_NAME = import.meta.env.VITE_TABLE_NAME
 export const USDC_ASSET_ID = import.meta.env.VITE_USDC_ASSET_ID
 // DYMENSION CONTRACTS
-export const dymensionRpcAddress = 'https://json-rpc.rolxtwo.evm.ra.blumbus.noisnemyd.xyz';
-export const privateKey = import.meta.env.VITE_KEY; // TODO: use litprocol to handle private signing
-export const contractAddress = '0x9F9CF2fA6a7a91eFadd0ee41b2aC4e183D0765D2';
+export const DYMENSION_RPC_ADDRESS = 'https://json-rpc.rolxtwo.evm.ra.blumbus.noisnemyd.xyz';
+export const PRIVATE_KEY = import.meta.env.VITE_KEY; // TODO: use litprocol to handle private signing
+export const PREDICTION_CONTRACT_ADDRESS = '0xF16f0Fa47f952cc081954C1ad78B1997Ab9e4cf8';
+export const DYMENSION_EXPLORER_URL = 'https://explorer.silknodes.io/blumbus/account/';

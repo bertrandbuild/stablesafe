@@ -75,11 +75,11 @@ function Admin() {
       {!isWhitelist && (
         <div>
           <p>
-            You are not a verifies predictor.
+            You are not a verified predictor.
           </p>
           <p>
             To be whitelisted, submit a community request on the {" "}
-            <a href="https://testnet.dymension.xyz/rollapp/rolx_100004-1/governance" target="_blank">
+            <a href="https://testnet.dymension.xyz/rollapp/rolx_100004-1/create-proposal" target="_blank">
               Dymension governance server
             </a>
             <br />
