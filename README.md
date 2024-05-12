@@ -6,23 +6,22 @@ A prediction market to alert you in case of depeg on stablecoins.
 
 ## Folder Architecture
 
-- [/autonomous-predictor](./autonomous-predictor/): the code to setup a remote predictor who can run 24/7 
-- [/data](./data/) : contain various dataset and the list of events that our 1st predictor found during the backtesting analysis
+- [/contracts](./contracts/): the predictor's contracts, with staking and user subscription
+- [/autonomous-predictor](./autonomous-predictor/): the code to setup a remote predictor running 24/7 
+- [/data](./data/) : contain various dataset - required to become a predictor
 - /src : the code of the frontend app
+
+## Tokenomics
+
+- The token is a ERC20 with a fixed supply of 100 000 000 tokens
+- It's deployed on Celestia with dymension (waiting for froopyland devnet deployment)
+- To access prediction, a user has to stake
+- A predictor has to be whitelisted by the community (after submitting a proof of quality)
+- A predictor can submit "stakedPrediction", that requires a stake and that notify users
+- Users votes to confirm that the prediction was insightful and reward the predictor
+
+![tokenomics](/docs/tokenomics.png)
 
 ## Setup a predictor
 
 - You can setup a predictor using see the associated [README.md](./autonomous-predictor/README.md)
-
-## Setup the interface
-
-- you a modern dev env with node/yarn
-- install metamask and add the iExec chain + ask to be whitelisted following [the iExec doc](https://tools.docs.iex.ec/)
-  - the user of `ADMIN_USER_ADDRESS` will be granted the right to send email
-- You can setup a new oracle using the code in /autonomous-predictor/services/iExecOracle.mjs or use the example cid
-- follow the tableland [getting started guide](https://docs.tableland.xyz/fundamentals) to setup a new tableland db, you can also use the example one but you will not be able to add vote and get an error
-- setup the env variables using the template `cp .env.example .env`
-- build using : `yarn build`
-- start using : `yarn dev`
-- to have access to the sendToAllEmail feature, you also need to setup the [iexec-api](./iexec-api/) and host it online (one example url is provided but only works for the admin)
-- ps: on vercel a build error arise because of tableland, fix the error in local with `yarn build` then use : `vercel build` and deploy with `vercel --prebuilt` then promote to production

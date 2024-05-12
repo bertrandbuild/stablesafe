@@ -2,7 +2,9 @@
 
 ## Files
 
-Those are training algorithm files that voters can use to train their own models.
+Those are training algorithm files that predictors can use to train their own models.
+
+Proof of quality detection is needed to become a verified predictor.
 
 - data_list_usdc.json : just the list of all coin from coingecko matching "usdc"
 - data_usdc_large_depeg: 1678338000 (9march'23) to 1679184000 (19march'23) - depeg from svb bank
