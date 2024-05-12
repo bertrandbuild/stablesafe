@@ -5,6 +5,30 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "./PayableContract.sol";
 
+/// @notice A struct that defines a prediction entity
+struct Prediction {
+    uint256 id;
+    uint256 date;
+    uint256 assetId;
+    address predictor;
+    uint8 notation;
+    string notationReason;
+}
+
+/// @notice Mappings to important predictions which notify users and need to be staked
+struct StakedPrediction {
+    // From Prediction
+    uint256 id;
+    uint256 date;
+    uint256 assetId;
+    address predictor;
+    uint8 notation;
+    string notationReason;
+    // Stake information
+    uint256 stake;
+    bool isPredictionCorrect;
+}
+
 /**
  * @title PredictionContract
  * @dev A contract that allows whitelisted users to add predictions and manage them.
@@ -12,28 +36,27 @@ import "./PayableContract.sol";
 contract PredictionContract is Ownable, ReentrancyGuard, PayableContract {
     /// @notice The current prediction ID counter
     uint256 private currentId;
-
-    /// @notice A struct that defines a prediction entity
-    struct Prediction {
-        uint256 id;
-        uint256 date;
-        uint256 assetId;
-        address predictor;
-        uint8 notation;
-        string notationReason;
-    }
+    uint256 private currentStakedId;
+    uint256 public constant STAKE_MULTIPLIER = 3;
+    /// @notice Array of all predictions IDs
+    uint256[] public predictionIds;
+    uint256[] public stakedPredictionIds;
 
     /// @notice Mappings to manage predictions, whitelist status, and asset-related predictions
     mapping(uint256 => Prediction) public predictions;
+    mapping(uint256 => StakedPrediction) public stakedPredictions;
     mapping(address => bool) public whitelist;
-    mapping(uint256 => uint256[]) public assetPredictions;
-
-    /// @notice An array of all prediction IDs
-    uint256[] public predictionIds;
 
     /// @notice Events to emit on important actions
     event PredictionAdded(uint256 indexed id, address indexed predictor);
     event Whitelisted(address indexed account, bool status);
+    event ImportantPredictionAdded(
+        uint256 indexed id,
+        address indexed predictor,
+        uint256 stake
+    );
+    event PredictorRewardPaid(address indexed predictor, uint256 reward);
+    event PredictorStakeLost(address indexed predictor, uint256 stake);
 
     /**
      * @notice Constructor initializes the contract with an initial owner and sets the starting prediction ID
@@ -41,6 +64,7 @@ contract PredictionContract is Ownable, ReentrancyGuard, PayableContract {
      */
     constructor(address initialOwner) Ownable(initialOwner) {
         currentId = 1;
+        currentStakedId = 1;
     }
 
     /// @notice Modifier to enforce that only whitelisted addresses can execute certain functions
@@ -74,7 +98,6 @@ contract PredictionContract is Ownable, ReentrancyGuard, PayableContract {
         require(_notation >= 1 && _notation <= 5, "Invalid notation");
 
         uint256 newId = currentId++;
-
         predictions[newId] = Prediction({
             id: newId,
             date: _date,
@@ -85,15 +108,73 @@ contract PredictionContract is Ownable, ReentrancyGuard, PayableContract {
         });
 
         predictionIds.push(newId);
-        assetPredictions[_assetId].push(newId);
 
         emit PredictionAdded(newId, msg.sender);
     }
 
     /**
+     * @notice Add a new staked prediction
+     * @param _date The date of the prediction (Unix timestamp)
+     * @param _assetId The ID of the predicted asset
+     * @param _notation The prediction rating (1 to 5)
+     * @param _notationReason The reason for the prediction notation
+     */
+    function addStakedPrediction(
+        uint256 _date,
+        uint256 _assetId,
+        uint8 _notation,
+        string memory _notationReason
+    ) public payable onlyWhitelisted nonReentrant {
+        require(_notation >= 1 && _notation <= 5, "Invalid notation");
+
+        uint256 newId = currentStakedId++;
+
+        // Handle important predictions which need to be staked
+        require(msg.value > 0, "Stake amount must be greater than zero");
+
+        stakedPredictions[newId] = StakedPrediction({
+            id: newId,
+            date: _date,
+            assetId: _assetId,
+            predictor: msg.sender,
+            notation: _notation,
+            notationReason: _notationReason,
+            // Stake information
+            stake: msg.value,
+            isPredictionCorrect: false
+        });
+
+        stakedPredictionIds.push(newId);
+
+        emit ImportantPredictionAdded(newId, msg.sender, msg.value);
+    }
+
+    function resolvePrediction(uint256 id, bool correct) external nonReentrant {
+        require(stakedPredictions[id].stake > 0, "No stake found");
+
+        uint256 initialStake = stakedPredictions[id].stake;
+        uint256 rewardAmount = initialStake * STAKE_MULTIPLIER;
+
+        if (correct) {
+            require(
+                address(this).balance >= rewardAmount,
+                "Insufficient funds in contract"
+            );
+            payable(stakedPredictions[id].predictor).transfer(rewardAmount);
+            emit PredictorRewardPaid(
+                stakedPredictions[id].predictor,
+                rewardAmount
+            );
+        } else {
+            emit PredictorStakeLost(
+                stakedPredictions[id].predictor,
+                rewardAmount
+            );
+        }
+    }
+
+    /**
      * @notice Retrieve a specific prediction by its ID
-     * @param _id The ID of the prediction to fetch
-     * @return The prediction struct with all associated data
      */
     function getPrediction(
         uint256 _id
@@ -103,9 +184,28 @@ contract PredictionContract is Ownable, ReentrancyGuard, PayableContract {
 
     /**
      * @notice Retrieve all prediction IDs
-     * @return An array of all prediction IDs
      */
     function getAllPredictionIds() public view returns (uint256[] memory) {
         return predictionIds;
+    }
+
+    /**
+     * @notice Retrieve a specific stakedPrediction by its ID
+     */
+    function getStakedPrediction(
+        uint256 _id
+    ) public view returns (StakedPrediction memory) {
+        return stakedPredictions[_id];
+    }
+
+    /**
+     * @notice Retrieve all prediction IDs
+     */
+    function getAllStakedPredictionIds()
+        public
+        view
+        returns (uint256[] memory)
+    {
+        return stakedPredictionIds;
     }
 }

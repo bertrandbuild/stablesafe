@@ -28,15 +28,15 @@ contract PredictionContractTest is Test {
         predictionContract.addPrediction(
             block.timestamp,
             1,
-            5,
-            "Huge depeg ! Risk is 5/5"
+            2,
+            "Looks fine but some regulation may change soon"
         );
-        PredictionContract.Prediction memory prediction = predictionContract.getPrediction(current_id);
+        Prediction memory prediction = predictionContract.getPrediction(current_id);
         assertEq(prediction.predictor, addr1);
-        assertEq(prediction.notation, 5);
+        assertEq(prediction.notation, 2);
         assertEq(prediction.date, block.timestamp);
         assertEq(prediction.assetId, 1);
-        assertEq(prediction.notationReason, "Huge depeg ! Risk is 5/5");
+        assertEq(prediction.notationReason, "Looks fine but some regulation may change soon");
     }
 
     function testFailAddPredictionByNonWhitelisted() public {
@@ -44,8 +44,8 @@ contract PredictionContractTest is Test {
         predictionContract.addPrediction(
             block.timestamp,
             1,
-            5,
-            "Should fail"
+            1,
+            "Everythings fine"
         );
     }
 
