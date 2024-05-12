@@ -27,6 +27,7 @@ struct StakedPrediction {
     // Stake information
     uint256 stake;
     bool isPredictionCorrect;
+    bool isAssessed;
 }
 
 /**
@@ -37,7 +38,7 @@ contract PredictionContract is Ownable, ReentrancyGuard, PayableContract {
     /// @notice The current prediction ID counter
     uint256 private currentId;
     uint256 private currentStakedId;
-    uint256 public constant STAKE_MULTIPLIER = 3;
+    uint256 public constant STAKE_MULTIPLIER = 1;
     /// @notice Array of all predictions IDs
     uint256[] public predictionIds;
     uint256[] public stakedPredictionIds;
@@ -141,7 +142,8 @@ contract PredictionContract is Ownable, ReentrancyGuard, PayableContract {
             notationReason: _notationReason,
             // Stake information
             stake: msg.value,
-            isPredictionCorrect: false
+            isPredictionCorrect: false,
+            isAssessed: false
         });
 
         stakedPredictionIds.push(newId);
@@ -151,6 +153,7 @@ contract PredictionContract is Ownable, ReentrancyGuard, PayableContract {
 
     function resolvePrediction(uint256 id, bool correct) external nonReentrant {
         require(stakedPredictions[id].stake > 0, "No stake found");
+        require(stakedPredictions[id].isAssessed == false, "This prediction has already been assessed");
 
         uint256 initialStake = stakedPredictions[id].stake;
         uint256 rewardAmount = initialStake * STAKE_MULTIPLIER;
@@ -161,6 +164,7 @@ contract PredictionContract is Ownable, ReentrancyGuard, PayableContract {
                 "Insufficient funds in contract"
             );
             payable(stakedPredictions[id].predictor).transfer(rewardAmount);
+            stakedPredictions[id].isPredictionCorrect = true;
             emit PredictorRewardPaid(
                 stakedPredictions[id].predictor,
                 rewardAmount
@@ -171,6 +175,8 @@ contract PredictionContract is Ownable, ReentrancyGuard, PayableContract {
                 rewardAmount
             );
         }
+
+        stakedPredictions[id].isAssessed = true;
     }
 
     /**

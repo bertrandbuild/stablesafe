@@ -93,7 +93,7 @@ function App() {
       </div>
       <div className="votes">
         {loading && <p>loading</p>}
-        <PredictionList votes={predictions} />
+        <PredictionList predictions={predictions} />
       </div>
     </div>
   );

@@ -1,5 +1,7 @@
-export type Prediction = {
-    uuid: string;
+export type Prediction = BasicPrediction | StakedPrediction;
+
+export type BasicPrediction = {
+    id: string;
     date: number;
     predictor: string;
     assetId: number;
@@ -7,5 +9,10 @@ export type Prediction = {
     notationReason: string;
 };
 
-export type PredictionForm = Omit<Prediction, 'predictor' | 'uuid'>;
+export type StakedPrediction = BasicPrediction & {
+    stake: number;
+    isAssessed: boolean;
+};
+
+export type PredictionForm = Omit<Prediction, 'predictor' | 'id'>;
 export type StakedPredictionForm = PredictionForm & { stake: string };

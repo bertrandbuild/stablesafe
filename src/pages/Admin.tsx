@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import "../styles/App.css";
 import { OraclePriceComponent } from "../components/OraclePrice";
 import { Prediction } from "../types";
-import { ClientList } from "../components/ClientList";
 import { PredictionForm } from "../components/PredictionForm";
-import { getAllPredictionIds, isWhitelisted, readPrediction } from "../services/DymensionPredictions";
+import { getAllPredictionIds, getAllStakedPredictionIds, isWhitelisted, readPrediction, readStakedPrediction } from "../services/DymensionPredictions";
 import { BigNumber, ethers } from "ethers";
 
 function Admin() {
@@ -15,14 +14,26 @@ function Admin() {
   const fetchPredictions = async () => {
     setLoading(true);
     const predictionIds = await getAllPredictionIds();
+    const stakedPredictionIds = await getAllStakedPredictionIds();
     const predictions = await Promise.all(
       predictionIds.map(async (predictionIdBN: BigNumber) => {
-        const predictionId = ethers.BigNumber.from(predictionIdBN._hex).toNumber();
+        const predictionId = ethers.BigNumber.from(
+          predictionIdBN._hex
+        ).toNumber();
         const prediction = await readPrediction(predictionId);
         return prediction;
       })
     );
-    setPredictions(predictions);
+    const stakedPredictions = await Promise.all(
+        stakedPredictionIds.map(async (predictionIdBN: BigNumber) => {
+          const predictionId = ethers.BigNumber.from(
+            predictionIdBN._hex
+          ).toNumber();
+          const stakedPrediction = await readStakedPrediction(predictionId);
+          return stakedPrediction;
+      })
+    );
+    setPredictions([...predictions, ...stakedPredictions]);
     setLoading(false);
   };
 
@@ -89,12 +100,6 @@ function Admin() {
             </a>
           </p>
         </div>
-      )}
-      {isWhitelist && (
-        <>
-          <h2>Subscribers</h2>
-          <ClientList />
-        </>
       )}
     </>
   );

@@ -245,6 +245,11 @@ export const predictionAbi = [
             "name": "isPredictionCorrect",
             "type": "bool",
             "internalType": "bool"
+          },
+          {
+            "name": "isAssessed",
+            "type": "bool",
+            "internalType": "bool"
           }
         ]
       }
@@ -419,6 +424,11 @@ export const predictionAbi = [
       },
       {
         "name": "isPredictionCorrect",
+        "type": "bool",
+        "internalType": "bool"
+      },
+      {
+        "name": "isAssessed",
         "type": "bool",
         "internalType": "bool"
       }

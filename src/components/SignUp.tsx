@@ -77,7 +77,7 @@ export function SignUpComponent() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
           />
-          <button onClick={handleSignUp}>Sign Up</button>
+          <button onClick={handleSignUp}>Sign Up - 0.1 ROLX</button>
         </form>
       )}
       {loading && <p>loading</p>}

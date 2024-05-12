@@ -169,3 +169,15 @@ export async function authorizeAndSubscribe() {
   }
 }
 
+export async function resolvePrediction(predictionId: number, wasUseful: boolean) {
+  console.log('resolve prediction', predictionId, wasUseful);
+  try {
+    const predictionContract = await getUserPredictionContract();
+    const tx = await predictionContract.resolvePrediction(predictionId, wasUseful);
+    await tx.wait();
+    console.log('vote successfully created');
+    return tx;
+  } catch (error) {
+    console.error('Error :', error);
+  }
+}

@@ -37,10 +37,47 @@ textarea {
   padding: 15px;
 }
 
-input[type='number'] {
+input[id='notation'] {
   width: 50px !important;
   font-size: 3em;
   margin: 10px !important;
+}
+
+input[id='stake'] {
+  width: 100px !important;
+  font-size: 3em;
+  margin: 10px !important;
+}
+
+label {
+  font-weight: bold;
+}
+
+table {
+  width: 100%;
+}
+
+.popup {
+  position: fixed;
+  z-index:1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #213547;
+  padding: 2em;
+  border-radius: 1em
+}
+
+.background {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+}
+
+.popup button {
+  margin-right: 10px;
 }
 
 .header {
@@ -78,6 +115,13 @@ input[type='number'] {
 
 .row {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
 }
