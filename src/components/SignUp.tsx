@@ -61,9 +61,7 @@ export function SignUpComponent() {
           setError(error.message);
         }
       } else {
-        throw new Error(
-          "An unexpected error occurred during the signup process."
-        );
+        setError("An unexpected error occurred during the signup process.");
       }
     }
   };

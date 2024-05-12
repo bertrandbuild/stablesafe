@@ -32,6 +32,17 @@ button {
   border-radius: 30px !important;
 }
 
+textarea {
+  border-radius: 30px !important;
+  padding: 15px;
+}
+
+input[type='number'] {
+  width: 50px !important;
+  font-size: 3em;
+  margin: 10px !important;
+}
+
 .header {
   display: flex;
   justify-content: center;

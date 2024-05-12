@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { PREDICTION_CONTRACT_ADDRESS, DYMENSION_RPC_ADDRESS, PRIVATE_KEY } from "../utils/constants";
 import { predictionAbi } from "./DymensionPredictionsABI";
-import { PredictionForm } from "../types";
+import { PredictionForm, StakedPredictionForm } from "../types";
 import { getProviderAndSigner } from "./provider";
 
 async function getUserPredictionContract() {
@@ -21,6 +21,17 @@ export async function getAllPredictionIds() {
   try {
     const predictionContract = await getAdminPredictionContract();
     const allPredictionIds = await predictionContract.getAllPredictionIds();
+    console.log('Ids:', allPredictionIds);
+    return allPredictionIds;
+  } catch (error) {
+    console.error('Error reading from the contract:', error);
+  }
+}
+
+export async function getAllStakedPredictionIds() {
+  try {
+    const predictionContract = await getAdminPredictionContract();
+    const allPredictionIds = await predictionContract.getAllStakedPredictionIds();
     console.log('Ids:', allPredictionIds);
     return allPredictionIds;
   } catch (error) {
@@ -51,6 +62,17 @@ export async function readPrediction(id: number) {
   }
 }
 
+export async function readStakedPrediction(id: number) {
+  try {
+    const predictionContract = await getAdminPredictionContract();
+    const prediction = await predictionContract.getStakedPrediction(id);
+    console.log('Prediction:', prediction);
+    return prediction;
+  } catch (error) {
+    console.error('Error reading from the contract:', error);
+  }
+}
+
 export async function addToWhitelist(address: string) {
   try {
     const predictionContract = await getUserPredictionContract();
@@ -67,7 +89,7 @@ export async function addPrediction(prediction: PredictionForm) {
   const { signer } = await getProviderAndSigner();
   const address = await signer.getAddress();
   try {
-    const predictionContract = await getAdminPredictionContract();
+    const predictionContract = await getUserPredictionContract();
     const isWhitelisted = await predictionContract.whitelist(address);
     if (!isWhitelisted) {
       console.error("User is not whitelisted.");
@@ -79,7 +101,35 @@ export async function addPrediction(prediction: PredictionForm) {
       prediction.notation,
       prediction.notationReason
     );
-    await tx.wait(); // Wait for the transaction to be mined
+    await tx.wait();
+    console.log('Transaction :', tx);
+    console.log('Transaction Hash:', tx.hash);
+    return tx;
+  } catch (error) {
+    console.error('Error writing to the contract:', error);
+  }
+}
+
+export async function addStakedPrediction(prediction: StakedPredictionForm) {
+  const { signer } = await getProviderAndSigner();
+  const address = await signer.getAddress();
+  try {
+    const predictionContract = await getUserPredictionContract();
+    const isWhitelisted = await predictionContract.whitelist(address);
+    if (!isWhitelisted) {
+      console.error("User is not whitelisted.");
+      return;
+    }
+    const tx = await predictionContract.addStakedPrediction(
+      prediction.date,
+      prediction.assetId,
+      prediction.notation,
+      prediction.notationReason,
+      {
+        value: ethers.utils.parseEther(prediction.stake)
+      }
+    );
+    await tx.wait();
     console.log('Transaction :', tx);
     console.log('Transaction Hash:', tx.hash);
     return tx;

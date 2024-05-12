@@ -1,6 +1,6 @@
 # Autonomous predictor template
 
-This template demonstrates how to setup a predictor and contributer to the StableSafe project.
+This template demonstrates how to setup a predictor and contribute to the StableSafe project.
 
 ## Get a backtesting history to be verified
 

@@ -20,13 +20,13 @@ export const predictionAbi = [
   },
   {
     "type": "function",
-    "name": "ROLX_token",
+    "name": "STAKE_MULTIPLIER",
     "inputs": [],
     "outputs": [
       {
         "name": "",
-        "type": "address",
-        "internalType": "contract IERC20"
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "stateMutability": "view"
@@ -61,16 +61,31 @@ export const predictionAbi = [
   },
   {
     "type": "function",
-    "name": "addToRewardPool",
+    "name": "addStakedPrediction",
     "inputs": [
       {
-        "name": "amount",
+        "name": "_date",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "_assetId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_notation",
+        "type": "uint8",
+        "internalType": "uint8"
+      },
+      {
+        "name": "_notationReason",
+        "type": "string",
+        "internalType": "string"
       }
     ],
     "outputs": [],
-    "stateMutability": "nonpayable"
+    "stateMutability": "payable"
   },
   {
     "type": "function",
@@ -87,31 +102,20 @@ export const predictionAbi = [
   },
   {
     "type": "function",
-    "name": "assetPredictions",
-    "inputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
+    "name": "getAllPredictionIds",
+    "inputs": [],
     "outputs": [
       {
         "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
+        "type": "uint256[]",
+        "internalType": "uint256[]"
       }
     ],
     "stateMutability": "view"
   },
   {
     "type": "function",
-    "name": "getAllPredictionIds",
+    "name": "getAllStakedPredictionIds",
     "inputs": [],
     "outputs": [
       {
@@ -149,7 +153,7 @@ export const predictionAbi = [
       {
         "name": "",
         "type": "tuple",
-        "internalType": "struct PredictionContract.Prediction",
+        "internalType": "struct Prediction",
         "components": [
           {
             "name": "id",
@@ -180,6 +184,67 @@ export const predictionAbi = [
             "name": "notationReason",
             "type": "string",
             "internalType": "string"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getStakedPrediction",
+    "inputs": [
+      {
+        "name": "_id",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "internalType": "struct StakedPrediction",
+        "components": [
+          {
+            "name": "id",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "date",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "assetId",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "predictor",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "notation",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "notationReason",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "stake",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "isPredictionCorrect",
+            "type": "bool",
+            "internalType": "bool"
           }
         ]
       }
@@ -271,8 +336,32 @@ export const predictionAbi = [
   },
   {
     "type": "function",
-    "name": "rewardPool",
-    "inputs": [],
+    "name": "resolvePrediction",
+    "inputs": [
+      {
+        "name": "id",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "correct",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "stakedPredictionIds",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
     "outputs": [
       {
         "name": "",
@@ -284,10 +373,57 @@ export const predictionAbi = [
   },
   {
     "type": "function",
-    "name": "subscribeUser",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    "name": "stakedPredictions",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "id",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "date",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "assetId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "predictor",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "notation",
+        "type": "uint8",
+        "internalType": "uint8"
+      },
+      {
+        "name": "notationReason",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "stake",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "isPredictionCorrect",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
   },
   {
     "type": "function",
@@ -336,6 +472,31 @@ export const predictionAbi = [
   },
   {
     "type": "event",
+    "name": "ImportantPredictionAdded",
+    "inputs": [
+      {
+        "name": "id",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "predictor",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "stake",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
     "name": "OwnershipTransferred",
     "inputs": [
       {
@@ -368,6 +529,44 @@ export const predictionAbi = [
         "type": "address",
         "indexed": true,
         "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "PredictorRewardPaid",
+    "inputs": [
+      {
+        "name": "predictor",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "reward",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "PredictorStakeLost",
+    "inputs": [
+      {
+        "name": "predictor",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "stake",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
       }
     ],
     "anonymous": false

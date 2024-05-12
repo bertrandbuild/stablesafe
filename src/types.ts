@@ -8,3 +8,4 @@ export type Prediction = {
 };
 
 export type PredictionForm = Omit<Prediction, 'predictor' | 'uuid'>;
+export type StakedPredictionForm = PredictionForm & { stake: string };

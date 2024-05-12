@@ -4,7 +4,12 @@ import { Prediction } from "../types.ts";
 import { PredictionList } from "../components/PredictionList.tsx";
 import { SignUpComponent } from "../components/SignUp.tsx";
 import { OraclePriceComponent } from "../components/OraclePrice.tsx";
-import { getAllPredictionIds, readPrediction } from "../services/DymensionPredictions.ts";
+import {
+  getAllPredictionIds,
+  getAllStakedPredictionIds,
+  readPrediction,
+  readStakedPrediction,
+} from "../services/DymensionPredictions.ts";
 import { BigNumber, ethers } from "ethers";
 import { init } from "../utils/init.ts";
 import { ADMIN_USER_ADDRESS } from "../utils/constants.ts";
@@ -18,14 +23,26 @@ function App() {
   const fetchPredictions = async () => {
     setLoading(true);
     const predictionIds = await getAllPredictionIds();
+    const stakedPredictionIds = await getAllStakedPredictionIds();
     const predictions = await Promise.all(
       predictionIds.map(async (predictionIdBN: BigNumber) => {
-        const predictionId = ethers.BigNumber.from(predictionIdBN._hex).toNumber();
+        const predictionId = ethers.BigNumber.from(
+          predictionIdBN._hex
+        ).toNumber();
         const prediction = await readPrediction(predictionId);
         return prediction;
       })
     );
-    setPredictions(predictions);
+    const stakedPredictions = await Promise.all(
+        stakedPredictionIds.map(async (predictionIdBN: BigNumber) => {
+          const predictionId = ethers.BigNumber.from(
+            predictionIdBN._hex
+          ).toNumber();
+          const stakedPrediction = await readStakedPrediction(predictionId);
+          return stakedPrediction;
+      })
+    );
+    setPredictions([...predictions, ...stakedPredictions]);
     setLoading(false);
   };
 
@@ -57,14 +74,18 @@ function App() {
           <div className="w50">
             <h2>Risk score</h2>
             <span className="risk-level">
-              <h1>{predictions.length > 0 && predictions[predictions.length - 1].notation}</h1>
+              <h1>
+                {predictions.length > 0 &&
+                  predictions[predictions.length - 1].notation}
+              </h1>
               <h3>/5</h3>
             </span>
           </div>
           <div className="w50">
             <h2>Summary</h2>
             <ul>
-              {predictions.length > 0 && predictions[predictions.length - 1].notationReason}
+              {predictions.length > 0 &&
+                predictions[predictions.length - 1].notationReason}
             </ul>
           </div>
         </div>
