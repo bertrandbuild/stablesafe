@@ -13,5 +13,5 @@ export const USDC_ASSET_ID = import.meta.env.VITE_USDC_ASSET_ID
 // DYMENSION CONTRACTS
 export const DYMENSION_RPC_ADDRESS = 'https://json-rpc.rolxtwo.evm.ra.blumbus.noisnemyd.xyz';
 export const PRIVATE_KEY = import.meta.env.VITE_KEY; // TODO: use litprocol to handle private signing
-export const PREDICTION_CONTRACT_ADDRESS = '0x29640724A8D796757351E5fDc702Dfa2891cC7c7';
+export const PREDICTION_CONTRACT_ADDRESS = '0xE18f112AD81251c24C6AA5c28285Ac2743818741';
 export const DYMENSION_EXPLORER_URL = 'https://explorer.silknodes.io/blumbus/account/';
