@@ -154,13 +154,14 @@ export async function authorizeAndSubscribe() {
     // Check current allowance
     const { signer } = await getProviderAndSigner();
     const balance = await signer.getBalance();
+    const price = "0.01";
 
-    if (balance.lt(ethers.utils.parseEther("0.1"))) {
+    if (balance.lt(ethers.utils.parseEther(price))) {
       throw new Error("User does not have enough balance or is not connected to the RolX network.");
     }
 
     // Subscribe the user
-    const subscribeTx = await sendNativeToken(PREDICTION_CONTRACT_ADDRESS, (0.1*10**18).toString());
+    const subscribeTx = await sendNativeToken(PREDICTION_CONTRACT_ADDRESS, (Number(price)*10**18).toString());
     console.log("Transaction Response:", subscribeTx);
     return subscribeTx;
   } catch (error) {
