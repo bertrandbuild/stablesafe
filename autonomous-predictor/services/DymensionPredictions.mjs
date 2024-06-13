@@ -3,7 +3,7 @@ import { predictionAbi } from "./DymensionPredictionsABI.mjs";
 
 const provider = new ethers.providers.JsonRpcProvider('https://json-rpc.rolxtwo.evm.ra.blumbus.noisnemyd.xyz');
 const wallet = new ethers.Wallet(process.env.ADMIN_WALLET_PRIVATE_KEY, provider);
-const predictionContract = new ethers.Contract('0x9F9CF2fA6a7a91eFadd0ee41b2aC4e183D0765D2', predictionAbi, wallet);
+const predictionContract = new ethers.Contract('0xE18f112AD81251c24C6AA5c28285Ac2743818741', predictionAbi, wallet);
 
 export async function getAllPredictionIds() {
   try {
